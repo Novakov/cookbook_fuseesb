@@ -27,7 +27,7 @@ batch 'Register Karaf service' do
 
 	code <<EOF
 @echo off
-pause
+
 cd bin
 
 move ..\\etc\\shell.init.script ..\\etc\\shell.init.script.bak
@@ -43,6 +43,7 @@ move ..\\etc\\shell.init.script.bak ..\\etc\\shell.init.script
 call karaf-service.bat install
 
 EOF
+	not_if { ::Win32::Service.exists?('karaf') }
 end
 
 service 'karaf' do
