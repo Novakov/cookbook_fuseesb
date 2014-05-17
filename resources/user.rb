@@ -1,4 +1,4 @@
-actions :create, :delete
+actions :create, :remove
 
 attribute :name, :kind_of => String, :required => true, :name_attribute => true
 attribute :password, :kind_of => String, :required => true

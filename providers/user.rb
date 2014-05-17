@@ -10,6 +10,12 @@ action :create do
 	end
 end
 
+action :remove do
+	converge_by "Deleting user #{@new_resource.name}" do
+		delete_user(@new_resource)
+	end
+end
+
 def load_current_resource
 	users = ::IO.readlines(users_file).
 			map { |i| i.strip }.
@@ -52,4 +58,14 @@ def save_user(user)
 	end
 
 	::File.write(users_file, modified.join("\n"))
+end
+
+def delete_user(user)
+	lines = ::IO.readlines(users_file)
+
+	remaining = lines.
+			find_all { |line| not line.start_with?("#{user.name}=") }.
+			map { |line| line.strip }
+
+	::File.write(users_file, remaining.join("\n"))
 end
