@@ -37,3 +37,9 @@ def find_java_home
 
 	return javaPath
 end
+
+def execute_karaf_command(command)
+	cmd = %Q("#{node['fuseesb']['install_dir']}/bin/client.bat" -h localhost -u #{node['fuseesb']['admin_user']} -p #{node['fuseesb']['admin_password']} #{command})
+
+	shell_out!(cmd)
+end
