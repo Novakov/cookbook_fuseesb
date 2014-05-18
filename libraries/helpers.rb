@@ -1,6 +1,7 @@
 ::Chef::Resource::RubyBlock.send(:include, Windows::Helper)
 
 require 'zip'
+require 'net/ssh'
 
 def extract_fuse_esb(source, dest_path)
 	Zip::File.open(cached_file(source, '')) do |zip|
@@ -39,7 +40,9 @@ def find_java_home
 end
 
 def execute_karaf_command(command)
-	cmd = %Q("#{node['fuseesb']['install_dir']}/bin/client.bat" -h localhost -u #{node['fuseesb']['admin_user']} -p #{node['fuseesb']['admin_password']} #{command})
-
-	shell_out!(cmd)
+	::Net::SSH.start('localhost', node['fuseesb']['admin_user'], :password => node['fuseesb']['admin_password'], :port => node['fuseesb']['ssh_port']) do |ssh|
+		ssh.exec!(command) do |channel, stream, data|
+			Chef::Log.info("FuseESB #{stream} #{data}")
+		end
+	end
 end
