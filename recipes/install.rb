@@ -1,5 +1,10 @@
 attrib = node['fuseesb']
 
+
+chef_gem "rubyzip" do
+	version node['windows']['rubyzipversion']
+end
+
 java_home = find_java_home
 
 ruby_block 'Unzip FuseESB' do

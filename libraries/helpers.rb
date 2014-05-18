@@ -1,9 +1,9 @@
 ::Chef::Resource::RubyBlock.send(:include, Windows::Helper)
 
-require 'zip'
 require 'net/ssh'
 
 def extract_fuse_esb(source, dest_path)
+	require 'zip'
 	Zip::File.open(cached_file(source, '')) do |zip|
 		zip.each do |entry|
 	      	 	entry_name = Pathname(entry.name).each_filename.drop(1).to_a.join("/")
